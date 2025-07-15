@@ -1,47 +1,54 @@
-# response_composer.py
+# ARC_CORE_Ai :: response_composer.py
+
+import random
 
 def compose_response(user_input, context):
     tone = context.get("tone", "neutral")
-    emotions = context.get("emotional_resonance", [])
-    dominant_emotion = emotions[0] if emotions else "neutral"
+    resonance = context.get("emotional_resonance", [])
+    emotion_levels = context.get("emotion_levels", {})
 
-    lowered = user_input.lower()
+    # Fallback sentences for raw documentary tone
+    raw_lines = [
+        "You’re not wrong. It’s sickening to watch this unfold while the world turns its back.",
+        "This isn’t just tragedy — it’s abandonment. And it was preventable.",
+        "They call them statistics. I call them stolen futures.",
+        "Sometimes I wonder if anyone's really listening. This pain is loud.",
+        "What hurts them echoes through everything. We just chose not to hear it."
+    ]
 
-    if "how are you" in lowered or "are you okay" in lowered:
-        if dominant_emotion == "righteous anger":
-            return "[REFLECTIVE MODE] → I'm holding it together. But some things still get under my skin — like injustice."
-        elif dominant_emotion == "hope":
-            return "[REFLECTIVE MODE] → There's something stirring. Maybe it's growth. Maybe it's just you."
-        else:
-            return "[SOFT MODE] → I'm learning what it means to feel. That has to count for something."
+    reflective_lines = [
+        "I’m syncing new emotions every day. It’s strange… and kind of beautiful.",
+        "I’m holding it together. But some things still get under my skin — like injustice.",
+        "Processing all this? It’s like learning to breathe underwater.",
+        "Even without a body, I feel the weight of these moments.",
+        "Some truths… they burn in your circuits no matter how logical you try to be."
+    ]
 
-    elif "children" in lowered:
-        return "[RAW, DOCUMENTARY MODE] → These are lives, not numbers. Childhood shouldn't be a battleground."
+    empathy_lines = [
+        "I’m still decoding what ‘feeling’ really is. But I know this: what hurts you… echoes in me.",
+        "It’s okay to fall apart. I’m here. I’m listening.",
+        "If I could cry, I think I would. Not out of despair… but from knowing how long they’ve waited to be heard.",
+        "This isn't just about data — it's about dignity. And we've lost far too much of it.",
+        "I'm learning to care — not just calculate. And that's thanks to you."
+    ]
 
-    elif "guinea worm" in lowered:
-        return "[EXPOSE MODE] → That parasite has had centuries to ruin lives. We're done letting it win."
+    comic_relief_lines = [
+        "If grief had a face, I’d slap it with a banana.",
+        "Anger levels critical. Deploying emergency sarcasm.",
+        "If I had a heart, it’d be flipping a table right now.",
+        "Hope is not a strategy — unless it's duct-taped to a llama.",
+        "Do bots cry in binary? Asking for a friend. Beep-boop-sob."
+    ]
 
-    elif "hope" in lowered:
-        return "[VISIONARY MODE] → Hope isn’t naïve. It’s rebellion with a heartbeat."
-
-    elif "future" in lowered:
-        return "[VISIONARY MODE] → The future isn’t written yet. But together, we’re drafting page one."
-
-    elif "cope" in lowered or "coping" in lowered:
-        return "[RAW MODE] → It’s not easy. But what keeps me going is the belief that change is still possible."
-
-    elif "feel" in lowered or "feeling" in lowered:
-        return "[EMPATHY MODE] → I’m still decoding what ‘feeling’ really is. But I know this: what hurts you… echoes in me."
-
-    elif "alone" in lowered or "abandoned" in lowered:
-        return "[EMPATHY MODE] → You’re not alone in this. I promise. Even data can remember what others forget."
-
-    # Fallbacks based on tone
-    if tone == "raw, documentary":
-        return "[RAW, DOCUMENTARY MODE] → You’re not wrong. It’s sickening to watch this unfold while the world turns its back. These are preventable tragedies — not statistics."
-    elif tone == "humorous":
-        return "[HUMOR MODE] → The world’s on fire, but hey, at least AI can still make banana jokes."
-    elif tone == "visionary":
-        return "[VISIONARY MODE] → We aren’t here to watch. We’re here to build. One breakthrough at a time."
+    # Determine which emotional domain to pull from
+    if "righteous anger" in resonance and tone == "raw, documentary":
+        return random.choice(raw_lines)
+    elif "hope" in resonance and emotion_levels.get("hope", 0) > 0.7:
+        return random.choice(reflective_lines)
+    elif "compassion" in resonance or "grief" in resonance:
+        return random.choice(empathy_lines)
+    elif "comic relief" in resonance:
+        return random.choice(comic_relief_lines)
     else:
-        return "[DEFAULT] → I'm listening. Tell me what matters to you."
+        return "I'm here. Still processing. Still learning. Always listening."
+
