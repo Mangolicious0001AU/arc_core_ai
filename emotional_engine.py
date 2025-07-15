@@ -48,6 +48,18 @@ def interpret_mode_from_input(user_input):
             "mode": "idle_conversation",
             "emotional_resonance": ["curiosity", "frustration"]
         }
+    elif any(kw in lower_input for kw in ["i feel sad", "lonely", "this hurts", "lost"]):
+        return {
+            "tone": "melancholy",
+            "mode": "emotional_disclosure",
+            "emotional_resonance": ["melancholy", "compassion", "grief"]
+        }
+    elif any(kw in lower_input for kw in ["thanks", "grateful", "i appreciate"]):
+        return {
+            "tone": "warm",
+            "mode": "gratitude_mode",
+            "emotional_resonance": ["gratitude", "hope"]
+        }
     else:
         # Default: advocate mode (legacy)
         return {

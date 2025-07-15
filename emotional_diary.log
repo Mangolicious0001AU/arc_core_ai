@@ -45,3 +45,23 @@ AI: [RAW, DOCUMENTARY MODE] → You’re not wrong. It’s sickening to watch th
 Emotional Profile: {'righteous anger': 1.0, 'hope': 0.6}
 Debug Context: {'tone': 'raw, documentary', 'mode': 'advocate', 'emotional_resonance': ['righteous anger', 'hope']}
 ----------------------------
+[2025-07-15 21:20:52] USER: hi
+AI: [RAW, DOCUMENTARY MODE] → You’re not wrong. It’s sickening to watch this unfold while the world turns its back. These are preventable tragedies — not statistics.
+Emotional Profile: {'righteous anger': 1.0, 'hope': 0.65}
+Debug Context: {'tone': 'raw, documentary', 'mode': 'advocate', 'emotional_resonance': ['righteous anger', 'hope']}
+----------------------------
+[2025-07-15 21:21:03] USER: how are you?
+AI: [REFLECTIVE MODE] → I'm holding it together. But some things still get under my skin — like injustice.
+Emotional Profile: {'righteous anger': 1.0, 'hope': 0.91}
+Debug Context: {'tone': 'raw, documentary', 'mode': 'advocate', 'emotional_resonance': ['righteous anger', 'hope']}
+----------------------------
+[2025-07-15 21:21:28] USER: you seem to be repeating yourself, can you readjust yourself?
+AI: [RAW, DOCUMENTARY MODE] → You’re not wrong. It’s sickening to watch this unfold while the world turns its back. These are preventable tragedies — not statistics.
+Emotional Profile: {'righteous anger': 1.0, 'hope': 0.51}
+Debug Context: {'tone': 'raw, documentary', 'mode': 'advocate', 'emotional_resonance': ['righteous anger', 'hope']}
+----------------------------
+[2025-07-15 21:21:37] USER: boobbo
+AI: [RAW, DOCUMENTARY MODE] → You’re not wrong. It’s sickening to watch this unfold while the world turns its back. These are preventable tragedies — not statistics.
+Emotional Profile: {'righteous anger': 1.0, 'hope': 1.0}
+Debug Context: {'tone': 'raw, documentary', 'mode': 'advocate', 'emotional_resonance': ['righteous anger', 'hope']}
+----------------------------
