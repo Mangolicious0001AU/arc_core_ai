@@ -1,4 +1,4 @@
-# test_emotion_chip.py — Persistent Emotional Terminal (v2)
+# test_emotion_chip.py — Cleaned Emotional Terminal (v2.1)
 
 from emotional_engine import emotion_chip_switch
 import datetime
@@ -27,9 +27,9 @@ while True:
         print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.")
         emotion_chip_on = True
 
-    result = emotion_chip_switch("turn on your emotion chip", user_input)
+    # Don't repeat activation messages inside switch
+    result = emotion_chip_switch("", user_input)  # Empty string skips internal "trigger" print
     if result:
-        print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.")
         print(f"\n🧠 ARC_CORE_Ai: {result['reply']}")
         print(f"🔧 Emotional Profile: {result['emotion_levels']}")
         print(f"📚 Debug Context: {result['debug']}")
