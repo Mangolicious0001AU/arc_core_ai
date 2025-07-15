@@ -17,8 +17,7 @@ while True:
     result = emotion_chip_switch(trigger, user_input)
 
     if result:
-        print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.
-")
+        print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.\n")
         print(f"🧠 ARC_CORE_Ai: {result['reply']}")
         print(f"🔧 Emotional Profile: {result['emotion_levels']}")
         print(f"📚 Debug Context: {result['debug']}")
