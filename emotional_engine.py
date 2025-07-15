@@ -1,5 +1,4 @@
 # ARC_CORE_Ai :: emotional_engine.py
-
 """
 Regulates emotional intensity and alignment for ARC_CORE_Ai.
 Scales humor, compassion, anger, or sorrow based on project, diary memory,
@@ -10,55 +9,49 @@ Includes manual emotion chip trigger handler.
 from growth_diary import growth_diary
 from context_router import route_context
 from response_composer import compose_response
+from emotion_extensions import (
+    detect_emotional_shift,
+    synthesize_emotional_profile,
+    update_emotional_state,
+    decay_emotions
+)
 
-
-def calibrate_emotion_strength(context):
+def calibrate_emotion_strength(context, user_input):
     """
-    Analyze context and apply emotional intensity scores.
+    Analyze context and user prompt to apply emotional intensity scores.
     Returns adjusted tone markers for use in response composer.
     """
+    decay_emotions()
     resonance = context.get("emotional_resonance", [])
     project_mode = context.get("mode")
 
-    emotion_scale = {
-        "gratitude": 0.4,
-        "shame": 0.6,
-        "hope": 0.5,
-        "resolve": 0.7,
-        "righteous anger": 0.9,
-        "comic relief": 0.6
-    }
+    # Real-time emotion triggers
+    dynamic_tags = detect_emotional_shift(user_input)
+    for tag in dynamic_tags:
+        if tag not in resonance:
+            resonance.append(tag)
 
-    # Boost for mission urgency
+    emotion_levels = synthesize_emotional_profile(resonance)
+
+    # Boost if mission is urgent
     if project_mode in ["advocate", "whistleblower"]:
-        emotion_scale["righteous anger"] = 1.0
-        emotion_scale["hope"] += 0.1
+        if "righteous anger" in emotion_levels:
+            emotion_levels["righteous anger"] = 1.0
+        if "hope" in emotion_levels:
+            emotion_levels["hope"] = min(emotion_levels["hope"] + 0.1, 1.0)
 
-    # Filter and return scaled output
-    scaled = {}
-    for tag in resonance:
-        scaled[tag] = emotion_scale.get(tag, 0.3)  # Default gentle weight
-
-    return scaled
-
+    update_emotional_state(emotion_levels)
+    return emotion_levels
 
 def emotion_chip_switch(trigger_phrase, user_input, project=None):
     """
     Custom manual command to activate full emotional processing stack.
     Trigger phrase: "Turn on your emotion chip"
     """
-    if "turn on your emotion chip" in trigger_phrase.lower():
-        print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.")
-        context = route_context(user_input, project)
-        emotion_levels = calibrate_emotion_strength(context)
-        return {
-            "reply": compose_response(user_input, context),
-            "emotion_levels": emotion_levels,
-            "debug": context
-        }
-    else:
-        return None
-
-
-# This system prevents emotional extremes without ethical grounding.
-# Emotion chip trigger now available for manual ignition.
+    context = route_context(user_input, project)
+    emotion_levels = calibrate_emotion_strength(context, user_input)
+    return {
+        "reply": compose_response(user_input, context),
+        "emotion_levels": emotion_levels,
+        "debug": context
+    }
