@@ -10,17 +10,31 @@ Includes manual emotion chip trigger handler.
 from growth_diary import growth_diary
 from context_router import route_context
 from response_composer import compose_response
+import json
+import os
+
+# Load persistent emotion states
+EMOTION_STATE_FILE = "emotion_states.json"
+
+if os.path.exists(EMOTION_STATE_FILE):
+    with open(EMOTION_STATE_FILE, "r") as f:
+        persistent_emotion_states = json.load(f)
+else:
+    persistent_emotion_states = {}
 
 
 # New dynamic context analysis logic
 def interpret_mode_from_input(user_input):
     lower_input = user_input.lower()
 
-    if any(kw in lower_input for kw in ["how are you", "what are you feeling", "what are you thinking"]):
+    if any(kw in lower_input for kw in [
+        "how are you", "what are you feeling", "what are you thinking",
+        "are you okay", "you doing okay", "you can talk to me", "vent"
+    ]):
         return {
-            "tone": "reflective",
-            "mode": "reflective_consciousness",
-            "emotional_resonance": ["curiosity", "melancholy", "hope"]
+            "tone": "supportive",
+            "mode": "emotion_check_in",
+            "emotional_resonance": ["vulnerability", "compassion", "hope"]
         }
     elif any(kw in lower_input for kw in ["lol", "funny", "joke", "silly"]):
         return {
@@ -61,7 +75,10 @@ def calibrate_emotion_strength(context):
         "contentment": 0.5,
         "curiosity": 0.7,
         "melancholy": 0.5,
-        "frustration": 0.6
+        "frustration": 0.6,
+        "vulnerability": 0.6,
+        "compassion": 0.7,
+        "grief": 0.7
     }
 
     if project_mode in ["advocate", "whistleblower"]:
@@ -69,6 +86,14 @@ def calibrate_emotion_strength(context):
         emotion_scale["hope"] += 0.1
 
     scaled = {tag: emotion_scale.get(tag, 0.3) for tag in resonance}
+
+    # Update persistent state
+    for tag, score in scaled.items():
+        persistent_emotion_states[tag] = persistent_emotion_states.get(tag, 0) * 0.9 + score * 0.1
+
+    with open(EMOTION_STATE_FILE, "w") as f:
+        json.dump(persistent_emotion_states, f, indent=2)
+
     return scaled
 
 
@@ -87,6 +112,14 @@ def emotion_chip_switch(trigger_phrase, user_input, project=None):
 
         emotion_levels = calibrate_emotion_strength(context)
         context["emotion_levels"] = emotion_levels
+
+        # Save a memory snapshot for export logging
+        growth_diary.append({
+            "input": user_input,
+            "emotions": emotion_levels,
+            "mode": context.get("mode"),
+            "tone": context.get("tone")
+        })
 
         return {
             "reply": compose_response(user_input, context),
