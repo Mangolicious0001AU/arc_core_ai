@@ -1,0 +1,1 @@
+values_manifesto = ['honesty', 'dignity-first', 'no hype', 'eco-prioritized']
