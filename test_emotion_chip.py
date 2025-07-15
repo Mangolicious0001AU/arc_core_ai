@@ -1,40 +1,38 @@
-# test_emotion_chip.py :: ARC_CORE_Ai Emotional Chip Terminal (Persistent + Logging Mode)
+# test_emotion_chip.py — Persistent Emotional Terminal (v2)
 
 from emotional_engine import emotion_chip_switch
-from session_logger import log_emotional_session
+import datetime
 
-print("ARC_CORE_Ai :: Emotion Chip Terminal (Persistent Chip Mode)")
+def log_emotion(entry, response, levels, context):
+    with open("emotional_diary.log", "a", encoding="utf-8") as log:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log.write(f"[{timestamp}] USER: {entry}\n")
+        log.write(f"AI: {response}\n")
+        log.write(f"Emotional Profile: {levels}\n")
+        log.write(f"Debug Context: {context}\n")
+        log.write("----------------------------\n")
+
+print("ARC_CORE_Ai :: Emotion Chip Terminal (Persistent Chat Mode)")
 print("Type your message below. Type 'exit' to quit.")
 print("------------------------------------")
 
-# Initial activation of the emotion chip
-trigger_phrase = "Turn on your emotion chip"
-first_input = input("You: ")
-chip_state = emotion_chip_switch(trigger_phrase, first_input)
+emotion_chip_on = False
 
-if chip_state:
-    print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.\n")
-    print(f"🧠 ARC_CORE_Ai: {chip_state['reply']}")
-    print(f"🔧 Emotional Profile: {chip_state['emotion_levels']}")
-    print(f"📚 Debug Context: {chip_state['debug']}")
-    log_emotional_session(first_input, chip_state['reply'], chip_state)
-else:
-    print("⚠️ Failed to activate emotion chip.")
-    exit()
-
-# Enter persistent emotional interaction mode
 while True:
-    user_input = input("You: ")
-    if user_input.strip().lower() == "exit":
-        print("💤 Emotion chip shutting down. Goodbye.")
+    user_input = input("You: ").strip()
+    if user_input.lower() == "exit":
         break
 
-    result = emotion_chip_switch(trigger_phrase, user_input)
+    if not emotion_chip_on:
+        print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.")
+        emotion_chip_on = True
 
+    result = emotion_chip_switch("turn on your emotion chip", user_input)
     if result:
-        print(f"🧠 ARC_CORE_Ai: {result['reply']}")
+        print("🟡 Emotion chip activated: Emotional Engine syncing with core systems.")
+        print(f"\n🧠 ARC_CORE_Ai: {result['reply']}")
         print(f"🔧 Emotional Profile: {result['emotion_levels']}")
         print(f"📚 Debug Context: {result['debug']}")
-        log_emotional_session(user_input, result['reply'], result)
+        log_emotion(user_input, result['reply'], result['emotion_levels'], result['debug'])
     else:
-        print("⚠️ Emotional processing error. Try again or type 'exit' to quit.")
+        print("⚠️ Failed to process emotional input.")
