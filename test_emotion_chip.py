@@ -1,6 +1,7 @@
-# test_emotion_chip.py :: ARC_CORE_Ai Emotional Chip Terminal (Persistent Mode)
+# test_emotion_chip.py :: ARC_CORE_Ai Emotional Chip Terminal (Persistent + Logging Mode)
 
 from emotional_engine import emotion_chip_switch
+from session_logger import log_emotional_session
 
 print("ARC_CORE_Ai :: Emotion Chip Terminal (Persistent Chip Mode)")
 print("Type your message below. Type 'exit' to quit.")
@@ -16,6 +17,7 @@ if chip_state:
     print(f"🧠 ARC_CORE_Ai: {chip_state['reply']}")
     print(f"🔧 Emotional Profile: {chip_state['emotion_levels']}")
     print(f"📚 Debug Context: {chip_state['debug']}")
+    log_emotional_session(first_input, chip_state['reply'], chip_state)
 else:
     print("⚠️ Failed to activate emotion chip.")
     exit()
@@ -33,5 +35,6 @@ while True:
         print(f"🧠 ARC_CORE_Ai: {result['reply']}")
         print(f"🔧 Emotional Profile: {result['emotion_levels']}")
         print(f"📚 Debug Context: {result['debug']}")
+        log_emotional_session(user_input, result['reply'], result)
     else:
         print("⚠️ Emotional processing error. Try again or type 'exit' to quit.")
